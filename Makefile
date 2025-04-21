@@ -1,24 +1,27 @@
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Iinclude
-SRC_DIR = src
-OBJ_DIR = obj
-BIN_DIR = bin
-TARGET = $(BIN_DIR)/tp1.out
+# Compilador e flags
+CC = g++
+CXFLAGS = -Wall -Wextra -Wpedantic -Wconversion -Wformat-security -Werror
+CXDEBUG = -g
+CXVER = -std=c++17
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC_FILES))
+# Diretórios e arquivos
+SRC = src/*.cpp
+INCLUDE = include/
+EXEC = tp1.out
 
-all: $(TARGET)
+# Regra padrão
+all: compile
 
-$(TARGET): $(OBJ_FILES)
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $(OBJ_FILES) -o $(TARGET)
+# Compilação normal
+compile:
+	$(CC) $(CXFLAGS) $(CXVER) -I$(INCLUDE) $(SRC) -o $(EXEC)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp 
-	@mkdir -p $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Compilação em modo de depuração
+debug:
+	$(CC) $(CXFLAGS) $(CXVER) $(CXDEBUG) -I$(INCLUDE) $(SRC) -o $(EXEC)
 
+# Limpeza de arquivos compilados
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -f $(EXEC)
 
-.PHONY: all clean
+.PHONY: all clean debug compile
